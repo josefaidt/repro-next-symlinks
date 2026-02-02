@@ -1,0 +1,27 @@
+version: 1
+applications:
+  - appRoot: ./
+    frontend:
+      phases:
+        preBuild:
+          commands:
+            - corepack enable
+            - export CI=true
+            - pnpm install
+        build:
+          commands:
+            - pnpm run build
+            # Resolve symlinks in .next to fix Amplify bundler EEXIST error
+            # Turbopack creates symlinks that Amplify's bundler can't handle
+            # - |
+            #   if [ -d ".next" ]; then
+            #     find .next -type l -exec sh -c 'target=$(readlink -f "$1") && rm "$1" && cp -r "$target" "$1"' _ {} \;
+            #   fi
+      artifacts:
+        baseDirectory: .next
+        files:
+          - '**/*'
+      cache:
+        paths:
+          - node_modules/.pnpm-store/**/*
+          - .next/cache/**/*
