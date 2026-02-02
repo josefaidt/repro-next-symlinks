@@ -1,6 +1,6 @@
 version: 1
 applications:
-  - appRoot: ./
+  - appRoot: a-directory
     frontend:
       phases:
         preBuild:
